@@ -132,9 +132,7 @@ export const addTeacher = TryCatch(async (req, res, next) => {
     return next(new ErrorHandler("Teacher ID is required", 400));
   }
   const subject = await SubjectModel.findById(_id);
-  if (!subject || subject.teacher) {
-    // console.log(subject.teacher)
-    console.log(subject);
+  if (!subject || subject.teacher === teacher) {
     return next(
       new ErrorHandler(
         "Subject not found or Teacher Already added to subject ",

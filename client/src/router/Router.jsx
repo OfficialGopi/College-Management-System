@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "../utils/ProtectedRoute.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { loginByToken } from "../services/authentication.js";
-import { login } from "../toolkits/features/admin/authSlice.jsx";
+import { login } from "../toolkits/features/user/authSlice.jsx";
 import MainLoader from "../components/loader/MainLoader.jsx";
 import AdminProtectedRoute from "../utils/AdminProtectedRoute.jsx";
 

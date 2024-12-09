@@ -45,6 +45,16 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.get("/", (req, res, next) => {
+  try {
+    throw {
+      name: "hello",
+    };
+  } catch (err) {
+    res.json(err);
+  }
+});
+
 app.use("/api/v1/user", user);
 app.use("/api/v1/admin", admin);
 app.use("/api/v1/notices", notices);

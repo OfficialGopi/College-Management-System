@@ -3,19 +3,26 @@ import { api } from "../utils/axiosConfig";
 export const getTotalStudents = async () => {
   try {
     const response = await api.get("/others/getallstudents");
-    return response.data;
+    return response.data.data;
   } catch (error) {
-    console.log(error);
-    return error.response.data;
+    throw error.response.data;
   }
 };
 export const getTotalTeachers = async () => {
   try {
     const response = await api.get("/others/getallteachers");
-    return response.data;
+    return response.data.data;
   } catch (error) {
-    console.log(error);
-    return error.response.data;
+    throw error.response.data;
+  }
+};
+
+export const getSubjectPerDepartment = async () => {
+  try {
+    const response = await api.get("/others/getsubjectsperdept");
+    return response.data.data;
+  } catch (error) {
+    throw error.response.data;
   }
 };
 

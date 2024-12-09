@@ -6,13 +6,12 @@ import { IGetTotalStudentsTypes } from "../types/types.js";
 import { TryCatch } from "../utils/TryCatch.js";
 import { ErrorHandler } from "../utils/utility-class.js";
 import path from "path";
+import { SubjectModel } from "../models/SubjectModel.js";
 
 export const getTotalStudents = TryCatch(async (req, res, next) => {
   const students = (await StudentAcademicDetailsModel.find().populate(
     "_id"
   )) as Array<IGetTotalStudentsTypes>;
-  console.log(students.length);
-  const totalStudents = students.length;
   let male = 0;
   let female = 0;
   let others = 0;
@@ -28,7 +27,6 @@ export const getTotalStudents = TryCatch(async (req, res, next) => {
   return res.json({
     success: true,
     data: {
-      totalStudents,
       male,
       female,
       others,
@@ -42,9 +40,7 @@ export const getTotalTeachers = TryCatch(async (req, res, next) => {
   const totalTeachers = teachers.length;
   return res.json({
     success: true,
-    data: {
-      totalTeachers,
-    },
+    data: totalTeachers,
     message: "Total teachers fetched successfully",
   });
 });
@@ -56,6 +52,28 @@ export const getAllTeacherDetails = TryCatch(async (req, res, next) => {
     success: true,
     data: {
       teachers,
+    },
+    message: "Total teachers fetched successfully",
+  });
+});
+
+export const getAllSubjectsPerDept = TryCatch(async (req, res, next) => {
+  const subjects = await SubjectModel.find();
+  const cseSubjects = subjects.filter(
+    (subject) => subject.department === "CSE"
+  ).length;
+  const itSubjects = subjects.filter(
+    (subject) => subject.department === "IT"
+  ).length;
+  const ltSubjects = subjects.filter(
+    (subject) => subject.department === "LT"
+  ).length;
+  return res.json({
+    success: true,
+    data: {
+      CSE: cseSubjects,
+      IT: itSubjects,
+      LT: ltSubjects,
     },
     message: "Total teachers fetched successfully",
   });

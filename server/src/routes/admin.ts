@@ -14,14 +14,13 @@ admin.post(
       );
     }
 
-    // Perform authentication logic here
     if (
       !(
         username == process.env.ADMIN_USERNAME &&
         password == process.env.ADMIN_PASSWORD
       )
     ) {
-      return next(new ErrorHandler("Invalid credentials", 401));
+      return next(new ErrorHandler("Invalid credentials", 400));
     }
     return res.json({
       success: true,

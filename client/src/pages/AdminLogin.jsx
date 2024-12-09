@@ -16,9 +16,23 @@ import { useEffect, useState } from "react";
 import { adminAuth, loginByToken } from "../services/authentication";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../toolkits/features/admin/authSlice";
+import { login } from "../toolkits/features/user/authSlice";
+import { adminLogin } from "../hooks/adminSliceDispatch";
 
 const AdminLogin = () => {
+  const [username, setUsername] = useState("");
+  const [secretKey, setSecretKey] = useState("");
+  const [showSecretKey, setShowSecretKey] = useState(false);
+  const togglesecretKeyVisibility = () => {
+    setShowSecretKey(!showSecretKey);
+  };
+
+  const dispatch = useDispatch();
+  const login = adminLogin();
+
+  const navigate = useNavigate();
+  const auth = useSelector((state) => state.auth.value);
+
   const loginProcess = () => {
     if (localStorage.getItem("cms-token")) {
       loginByToken(localStorage.getItem("cms-token")).then((data) => {
@@ -38,30 +52,23 @@ const AdminLogin = () => {
     }
   };
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const auth = useSelector((state) => state.auth.value);
-
-  const [username, setUsername] = useState("");
-  const [secretKey, setSecretKey] = useState("");
-  const [showSecretKey, setShowSecretKey] = useState(false);
-  const togglesecretKeyVisibility = () => {
-    setShowSecretKey(!showSecretKey);
-  };
   const handleLogin = (e) => {
     e.preventDefault();
-    adminAuth(username, secretKey)
-      .then((res) => {
-        if (res.success) {
-          dispatch(login(res.data));
-          navigate("/admin/in");
-          toast.success("Login successful!");
-        }
+    toast
+      .promise(adminAuth(username, secretKey), {
+        loading: "Loading",
+        success: "Login successful",
+        error: (error) => error.error,
       })
-      .catch(() => {
-        toast.error("Invalid Credentials");
+      .then(() => {
+        login();
+        navigate("/admin/in");
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
+
   useEffect(() => {
     if (auth) {
       if (auth.role === "student") {
